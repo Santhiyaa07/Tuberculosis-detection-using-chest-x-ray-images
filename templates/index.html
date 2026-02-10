@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TB Detection</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 40px; }
+        img { width: 300px; margin-top: 20px; }
+        .result { font-size: 20px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h2>🫁 Tuberculosis Detection using Chest X-ray</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" required>
+    <br><br>
+    <button type="submit">Detect TB</button>
+</form>
+
+{% if error %}
+    <p style="color:red;"><b>{{ error }}</b></p>
+{% endif %}
+
+{% if img_path %}
+    <img src="{{ img_path }}">
+{% endif %}
+
+{% if result %}
+    <div class="result">
+        <p><b>Result:</b> {{ result }}</p>
+        <p><b>Tuberculosis Probability:</b> {{ "%.2f"|format(confidence.tb) }}%</p>
+        <p><b>Normal Probability:</b> {{ "%.2f"|format(confidence.normal) }}%</p>
+    </div>
+{% endif %}
+
+</body>
+</html>

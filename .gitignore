@@ -1,0 +1,32 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+
+# Python installation files (ignore!)
+Lib/
+Scripts/
+include/
+libs/
+tcl/
+python.exe
+pythonw.exe
+python3.dll
+python313.dll
+vcruntime*.dll
+LICENSE.txt
+NEWS.txt
+
+# Dataset
+datasets/
+uploads/
+
+# Model weights
+*.h5
+*.pt
+*.pth
+
+# IDE
+.vscode/
