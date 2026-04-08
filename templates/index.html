@@ -2,11 +2,118 @@
 <html>
 <head>
     <title>TB Detection</title>
+
     <style>
-        body { font-family: Arial; text-align: center; margin-top: 40px; }
-        img { width: 300px; margin-top: 20px; }
-        .result { font-size: 20px; margin-top: 20px; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2ff, #f8fbff);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 40px;
+            color: #0b5394;
+            font-weight: 600;
+        }
+
+        form {
+            margin-top: 30px;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+
+        button {
+            padding: 10px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #0b5394;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #073763;
+            transform: scale(1.05);
+        }
+
+        img {
+            width: 320px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ✅ NEW: SIDE-BY-SIDE IMAGE STYLE */
+        .image-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap; /* responsive */
+        }
+
+        .image-box {
+            text-align: center;
+        }
+
+        .result {
+            margin: 30px auto;
+            padding: 25px;
+            width: 400px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+            font-size: 18px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .result p {
+            margin: 12px 0;
+        }
+
+        .result b {
+            color: #0b5394;
+        }
+
+        .probability {
+            font-weight: bold;
+            font-size: 19px;
+        }
+
+        .tb {
+            color: #d32f2f;
+        }
+
+        .normal {
+            color: #2e7d32;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            color: #0b5394;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
+
 </head>
 <body>
 
@@ -19,18 +126,46 @@
 </form>
 
 {% if error %}
-    <p style="color:red;"><b>{{ error }}</b></p>
+    <p class="error">{{ error }}</p>
 {% endif %}
 
-{% if img_path %}
-    <img src="{{ img_path }}">
+<!-- ✅ SIDE-BY-SIDE IMAGES -->
+{% if img_path and heatmap_path %}
+    <div class="image-row">
+        <div class="image-box">
+            <h3>Uploaded X-ray</h3>
+            <img src="{{ img_path }}">
+        </div>
+
+        <div class="image-box">
+            <h3>🔥 Grad-CAM Visualization</h3>
+            <img src="{{ heatmap_path }}">
+        </div>
+    </div>
 {% endif %}
 
+<!-- RESULT SECTION -->
 {% if result %}
     <div class="result">
         <p><b>Result:</b> {{ result }}</p>
-        <p><b>Tuberculosis Probability:</b> {{ "%.2f"|format(confidence.tb) }}%</p>
-        <p><b>Normal Probability:</b> {{ "%.2f"|format(confidence.normal) }}%</p>
+
+        <p><b>Severity:</b> {{ severity }}</p>
+
+        <p style="color:#444; font-style: italic;">
+            {{ message }}
+        </p>
+
+        <p style="color:#0b5394; font-weight:bold;">
+            {{ suggestion }}
+        </p>
+
+        <p class="probability tb">
+            TB Probability: {{ "%.2f"|format(confidence.tb) }}%
+        </p>
+
+        <p class="probability normal">
+            Normal Probability: {{ "%.2f"|format(confidence.normal) }}%
+        </p>
     </div>
 {% endif %}
 
